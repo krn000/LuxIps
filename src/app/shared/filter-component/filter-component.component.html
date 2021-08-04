@@ -1,0 +1,114 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div (click)="isCollapsed = !isCollapsed" class="card-header d-flex">
+      <div class="mr-auto">Filter Data</div>
+      <div class="ml-auto">
+        <i *ngIf="!isCollapsed" class="fa fa-sort-up"></i>
+        <i *ngIf="isCollapsed" class="fa fa-sort-down"></i>
+      </div>
+    </div>
+    <div class="card-body" (collapsed)="collapsed($event)" (expanded)="expanded($event)" [collapse]="isCollapsed">
+      <form [formGroup]="filterForm">
+        <div class="row" *ngIf="filterType === 'chart'">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="area">Roles</label>
+              <select class="form-control" id="area" (change)="selectRole($event.target.value)" [(ngModel)]="roleId"
+                [ngModelOptions]="{standalone: true}">
+                <option value="">Select role</option>
+                <option [value]="role._id" *ngFor="let role of roleList">
+                  {{ role.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-group">
+              <label for="month">Month</label>
+              <input name="Month" type="month" class="form-control" id="month" placeholder="Select month"
+                [value]="month" (change)="
+                  getYearlyMonthly($event.target.value, 'month', [
+                    'year',
+                    'week'
+                  ])
+                " />
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-group">
+              <label for="week">Week</label>
+              <input name="week" type="week" class="form-control" id="week" placeholder="Select week" [value]="week"
+                (change)="
+                  getYearlyMonthly($event.target.value, 'week', [
+                    'year',
+                    'month'
+                  ])
+                " />
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-group">
+              <label for="year">Year</label>
+              <select name="year" class="form-control" id="year" (change)="
+                  getYearlyMonthly($event.target.value, 'year', [
+                    'month',
+                    'week'
+                  ])
+                ">
+                <option value="" disabled selected>Select year</option>
+                <option *ngFor="let year of getYearsList()" [value]="year">
+                  {{ year }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="filterType === 'user'">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="area">Roles</label>
+              <select formControlName="role" class="form-control" id="area" (change)="selectRole($event.target.value)">
+                <option value="">Select role</option>
+                <option [value]="role._id" *ngFor="let role of roleList">
+                  {{ role.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="filterType === 'user' || filterType === 'request'">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="fromDate"> Date From</label>
+              <input onkeydown="return false" formControlName="validFrom" type="date" class="form-control" id="fromDate"
+                placeholder="dd/mm/yyyy" onkeydown="return false" />
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="toDate"> Date To</label>
+              <input onkeydown="return false" formControlName="validTo" type="date" class="form-control" id="toDate"
+                placeholder="dd/mm/yyyy" onkeydown="return false" />
+            </div>
+          </div>
+        </div>
+      </form>
+      <button (click)="submitForm()" class="btn btn-primary" type="button">
+        Submit
+      </button>
+
+      <button (click)="resetFilter()" class="btn btn-warning" type="button">
+        Reset
+      </button>
+    </div>
+    <!-- <div class="card-footer">
+            <button (click)="submitForm()" class="btn btn-primary" type="button">
+        Submit
+      </button>
+
+            <button (click)="resetFilter()" class="btn btn-warning" type="button">
+        Reset
+      </button>
+        </div> -->
+  </div>
+</div>
